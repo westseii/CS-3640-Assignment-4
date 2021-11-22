@@ -48,7 +48,8 @@ class DNSProber:
 
 
 def main():
-    dnsp = DNSProber(resolver='8.8.8.8', domain='toutatis.cs.uiowa.edu', query_type='A')
+    dnsp = DNSProber(resolver='8.8.8.8',
+                     domain='toutatis.cs.uiowa.edu', query_type='A')
     print("DNS Query:", dnsp.dns_query.summary())
     print("DNS Response:", dnsp.dns_response.summary())
     print("DNS IPs returned:", dnsp.returned_ips)

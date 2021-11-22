@@ -61,7 +61,6 @@ class HTTPProber:
         :return:
         """
 
-
     def __send_get_request(self):
         """
         This method will construct, send, and record the responses from a HTTP GET request
@@ -101,7 +100,8 @@ class HTTPProber:
 
 
 def main():
-    HTTPProber("toutatis.cs.uiowa.edu", 8118, random.choice(range(1024, 2**16-1)), "knock knock")
+    HTTPProber("toutatis.cs.uiowa.edu", 8118, random.choice(
+        range(1024, 2**16-1)), "knock knock")
 
 
 if __name__ == '__main__':

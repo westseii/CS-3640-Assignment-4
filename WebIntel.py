@@ -27,7 +27,8 @@ class WebIntel:
         send a dns request. get response. save parsed response.
         :return:
         """
-        dns = DNSProbes.DNSProber(resolver="8.8.8.8", domain=self.dst_url, query_type="A")
+        dns = DNSProbes.DNSProber(
+            resolver="8.8.8.8", domain=self.dst_url, query_type="A")
         self.dns_ips = dns.returned_ips
 
     def http_probe(self, user_agent):
