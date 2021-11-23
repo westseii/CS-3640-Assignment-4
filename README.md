@@ -2,6 +2,21 @@
 
 <hr>
 
+<b>Documentation</b>
+
+<a href="https://scapy.readthedocs.io/en/latest/index.html"> Scapy docs </a>
+<br><br>
+
+<a href="https://scapy.readthedocs.io/en/latest/api/scapy.sendrecv.html?highlight=sr1#scapy.sendrecv.sr1"> scapy.sendrecv.sr1 </a>
+
+The function `sr1()` is a variant that only returns one packet that answered the packet (or the packet set) sent. The packets must be layer 3 packets (IP, ARP, etc.).
+
+<a href="https://scapy.readthedocs.io/en/latest/api/scapy.layers.dns.html"> scapy.layers.dns </a>
+
+<a href="https://scapy.readthedocs.io/en/latest/api/scapy.layers.inet.html"> scapy.layers.inet </a>
+
+<hr>
+
 # <center> CS 3640: Introduction to Networks and Their Applications </center>
 ## <center> Assignment 4: Web Intelligence Gathering [16 points] </center>
 <center> Released on: Nov 16th | Due on: Dec 9th 11:59pm</center>
