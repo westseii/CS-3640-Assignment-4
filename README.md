@@ -1,3 +1,7 @@
+<a href="https://github.com/guedou/guedou.github.io/blob/master/talks/2019_BHUSA/Scapy.ipynb"> More readable slides here </a>
+
+<hr>
+
 # <center> CS 3640: Introduction to Networks and Their Applications </center>
 ## <center> Assignment 4: Web Intelligence Gathering [16 points] </center>
 <center> Released on: Nov 16th | Due on: Dec 9th 11:59pm</center>
