@@ -11,7 +11,7 @@ Scott West
 #### Credits:
 Leon Deng: nyi<br>
 Justin Liu: nyi<br>
-Scott West: nyi
+Scott West: Worked on DNSProbes.py. Managed the Git repository.
 
 #### Resources used:
 nyi
