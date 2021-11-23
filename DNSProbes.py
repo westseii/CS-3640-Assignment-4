@@ -42,7 +42,6 @@ class DNSProber:
         packet = IP(dst=self.resolver) / \
             UDP(dport=53) / \
             DNS(rd=1, qd=DNSQR(qname=self.domain, qtype=self.query_type))
-        # ttl = time to live/hop limit
         self.dns_query = packet
 
         # send the query
