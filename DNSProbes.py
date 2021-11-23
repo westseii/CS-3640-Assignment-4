@@ -38,6 +38,24 @@ class DNSProber:
         :return:
         """
 
+        # construct a DNS query packet
+        packet = IP(dst=self.resolver, ttl=10) / \
+            UDP(dport=53) / \
+            DNS(rd=1, qd=DNSQR(qname=self.domain, qtype=self.query_type))
+        # ttl = time to live/hop limit
+        self.dns_query = packet
+
+        # send the query
+        response = sr1(packet, verbose=0)  # request/response
+        self.dns_response = response
+
+        # show the structure and attributes of the packet
+        print("\n", self.dns_response.__dir__, "\n")
+
+        # sudo -E python3 DNSProbes.py
+        #      -E    Indicates to the security policy that the user wishes to preserve their existing environment variables
+        #            Fix for:    ModuleNotFoundError: No module named 'scapy'
+
     def __parse_dns_response(self):
         """
         Extract the IP addresses contained in the answers field of the DNS response.

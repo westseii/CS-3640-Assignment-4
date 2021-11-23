@@ -27,6 +27,7 @@ class WebIntel:
         send a dns request. get response. save parsed response.
         :return:
         """
+
         dns = DNSProbes.DNSProber(
             resolver="8.8.8.8", domain=self.dst_url, query_type="A")
         self.dns_ips = dns.returned_ips
@@ -38,6 +39,7 @@ class WebIntel:
         :param user_agent:
         :return:
         """
+
         http = HTTPProbes.HTTPProber(self.dns_ips[0], self.dst_port, user_agent=user_agent,
                                      src_port=random.choice(range(1024, 2 ** 16 - 1)))
         self.http_content = http.content
@@ -48,6 +50,7 @@ class WebIntel:
         parsed responses.
         :return:
         """
+
         traceroute = TraceRouteProbes.RouteProber(self.dns_ips[0])
         self.traceroute_path = traceroute.path
 

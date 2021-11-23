@@ -1,5 +1,4 @@
 """
-
 Note: Scapy does not use the TCP implementation made available by the Kernel.
 
 This has implications for the way you deal with the TCP handshake.
@@ -16,7 +15,6 @@ Run:
 `sudo iptables -A OUTPUT -p tcp --tcp-flags RST RST -s <your IP from 'ifconfig'> -j DROP`
 in the command line of your Linux VM.
 """
-
 
 from scapy.all import *
 from scapy.layers.inet import TCP, IP
