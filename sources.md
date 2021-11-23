@@ -11,7 +11,7 @@ Scott West
 #### Credits:
 Leon Deng: nyi<br>
 Justin Liu: nyi<br>
-Scott West: Worked on DNSProbes.py. Managed the Git repository.
+Scott West: Worked on DNSProbes.py and HTTPProbes.py. Managed the Git repository.
 
 #### Resources used:
 Extract IPs/DNS response: https://www.je-clark.com/posts/dissecting-dns-responses-with-scapy
