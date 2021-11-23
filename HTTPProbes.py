@@ -59,6 +59,8 @@ class HTTPProber:
         :return:
         """
 
+        # sudo -E python3 HTTPProbes.py
+
     def __send_get_request(self):
         """
         This method will construct, send, and record the responses from a HTTP GET request
@@ -85,6 +87,8 @@ class HTTPProber:
         :return:
         """
 
+        # sudo -E python3 HTTPProbes.py
+
     def __end_connection(self):
         """
         This method will send a FIN packet and exit.
@@ -95,6 +99,8 @@ class HTTPProber:
 
         :return:
         """
+
+        # sudo -E python3 HTTPProbes.py
 
 
 def main():
