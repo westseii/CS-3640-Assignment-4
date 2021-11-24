@@ -2,6 +2,8 @@ from scapy.all import sr1
 from scapy.layers.dns import DNS, DNSQR
 from scapy.layers.inet import IP, UDP
 
+from scapy.packet import ls
+
 
 class DNSProber:
     """
@@ -38,18 +40,26 @@ class DNSProber:
         :return:
         """
 
+        # explore...
+        # ls(IP)
+        # ls(UDP)
+        # ls(DNS)
+        # ls(DNSQR)
+
         # construct a DNS query packet
         packet = IP(dst=self.resolver) / \
             UDP(dport=53) / \
             DNS(rd=1, qd=DNSQR(qname=self.domain, qtype=self.query_type))
         self.dns_query = packet
 
+        # print(packet.src)
+
         # send the query
         response = sr1(packet)  # request/response
         self.dns_response = response
 
         # show the structure and attributes of the packet
-        # print(self.dns_response.show())
+        # self.dns_response.show()
 
         # sudo -E python3 DNSProbes.py
         #      -E    Indicates to the security policy that the user wishes to preserve their existing environment variables
