@@ -59,6 +59,29 @@ class HTTPProber:
         :return:
         """
 
+        # create TCP packet - SYN
+        syn_packet = IP(dst=self.dst_ip) / \
+            TCP(sport=self.src_port, dport=self.dst_port, flags='S')
+
+        syn_ack = sr1(syn_packet)  # request/response, begin handshake
+
+        # show the structure and attributes of the packet
+        # print(syn_ack.show())
+
+        # parse server response
+        seq_num = syn_ack.seq
+        ack_num = seq_num + 1
+
+        # print(seq_num)
+        # print(ack_num)
+
+        # create TCP packet - ACK
+        ack_packet = IP(dst=self.dst_ip) / \
+            TCP(sport=self.src_port, dport=self.dst_port,
+                flags='A', seq=seq_num, ack=ack_num)
+
+        send(ack_packet)  # reply with ACK
+
         # sudo -E python3 HTTPProbes.py
 
     def __send_get_request(self):
