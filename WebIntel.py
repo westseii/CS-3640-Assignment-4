@@ -15,6 +15,10 @@ import TraceRouteProbes
 import random
 
 
+# test all
+# sudo -E python3 WebIntel.py
+
+
 class WebIntel:
 
     def __init__(self, url, port):

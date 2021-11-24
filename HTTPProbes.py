@@ -59,6 +59,32 @@ class HTTPProber:
         :return:
         """
 
+        # explore...
+        # ls(TCP)
+        # ls(HTTPRequest)
+
+        # create TCP packet - SYN
+        syn_packet = \
+            IP(dst=self.dst_ip) / \
+            TCP(sport=self.src_port, dport=self.dst_port, flags='S', seq=1000)
+
+        syn_ack = sr1(syn_packet)  # request/response, begin handshake
+
+        # show the structure and attributes of the syn_ack
+        # syn_ack.show()
+
+        ack_num = syn_ack.seq + 1
+
+        # create TCP packet - ACK
+        ack_packet = \
+            IP(dst=self.dst_ip) / \
+            TCP(sport=self.src_port, dport=self.dst_port,
+                flags='A', seq=1001, ack=ack_num)
+
+        send(ack_packet)  # reply with ACK
+
+        # sudo -E python3 HTTPProbes.py
+
     def __send_get_request(self):
         """
         This method will construct, send, and record the responses from a HTTP GET request
@@ -85,6 +111,18 @@ class HTTPProber:
         :return:
         """
 
+        # construct a HTTP GET request packet
+        request = \
+            HTTP() / \
+            HTTPRequest(Host=self.dst_ip + ":" + str(self.dst_port), Accept="text/html",
+                        Accept_Language="en-US,en", Connection="close", User_Agent=self.user_agent)
+
+        # send the GET request
+
+        # extract the HTTP content
+
+        # sudo -E python3 HTTPProbes.py
+
     def __end_connection(self):
         """
         This method will send a FIN packet and exit.
@@ -95,6 +133,8 @@ class HTTPProber:
 
         :return:
         """
+
+        # sudo -E python3 HTTPProbes.py
 
 
 def main():

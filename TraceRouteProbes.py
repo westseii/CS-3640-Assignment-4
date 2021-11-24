@@ -30,6 +30,8 @@ class RouteProber:
         :return:
         """
 
+        # sudo -E python3 TraceRouteProbes.py
+
 
 def main():
     tr = RouteProber("8.8.8.8")
