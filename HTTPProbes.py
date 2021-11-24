@@ -60,7 +60,8 @@ class HTTPProber:
         """
 
         # create TCP packet - SYN
-        syn_packet = IP(dst=self.dst_ip) / \
+        syn_packet = \
+            IP(dst=self.dst_ip) / \
             TCP(sport=self.src_port, dport=self.dst_port, flags='S')
 
         syn_ack = sr1(syn_packet)  # request/response, begin handshake
@@ -76,7 +77,8 @@ class HTTPProber:
         # print(ack_num)
 
         # create TCP packet - ACK
-        ack_packet = IP(dst=self.dst_ip) / \
+        ack_packet = \
+            IP(dst=self.dst_ip) / \
             TCP(sport=self.src_port, dport=self.dst_port,
                 flags='A', seq=seq_num, ack=ack_num)
 
@@ -109,6 +111,16 @@ class HTTPProber:
 
         :return:
         """
+
+        # construct a HTTP GET request packet
+        request = \
+            HTTP() / \
+            HTTPRequest(Host=self.dst_ip + ":" + str(self.dst_port), Accept="text/html",
+                        Accept_Language="en-US,en", Connection="close", User_Agent=self.user_agent)
+
+        # send the GET request
+
+        # extract the HTTP content
 
         # sudo -E python3 HTTPProbes.py
 
