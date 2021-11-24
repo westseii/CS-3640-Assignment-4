@@ -1,11 +1,12 @@
-<a href="https://github.com/guedou/guedou.github.io/blob/master/talks/2019_BHUSA/Scapy.ipynb"> More readable slides here </a>
+:fireworks: <a href="https://github.com/guedou/guedou.github.io/blob/master/talks/2019_BHUSA/Scapy.ipynb"> More readable slides here </a> :fireworks:
 
 <hr>
 
-<b>Documentation</b>
+## Documentation
 
 <a href="https://scapy.readthedocs.io/en/latest/index.html"> Scapy docs </a>
-<br><br>
+
+### DNSProbes.py
 
 <a href="https://scapy.readthedocs.io/en/latest/api/scapy.sendrecv.html?highlight=sr1#scapy.sendrecv.sr1"> scapy.sendrecv.sr1 </a>
 
@@ -14,6 +15,10 @@ The function `sr1()` is a variant that only returns one packet that answered the
 <a href="https://scapy.readthedocs.io/en/latest/api/scapy.layers.dns.html"> scapy.layers.dns </a>
 
 <a href="https://scapy.readthedocs.io/en/latest/api/scapy.layers.inet.html"> scapy.layers.inet </a>
+
+### HTTPProbes.py
+
+<a href="https://scapy.readthedocs.io/en/latest/api/scapy.layers.http.html"> scapy.layers.http </a>
 
 <hr>
 
