@@ -14,4 +14,6 @@ Justin Liu: nyi<br>
 Scott West: Worked on `DNSProber` and `HTTPProber`. Managed the Git repository.
 
 #### Resources used:
+Scapy docs: https://scapy.readthedocs.io/en/latest/index.html
+
 Extract IPs/DNS response: https://www.je-clark.com/posts/dissecting-dns-responses-with-scapy
