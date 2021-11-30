@@ -11,9 +11,11 @@ Scott West
 #### Credits:
 Leon Deng: nyi<br>
 Justin Liu: nyi<br>
-Scott West: Worked on `DNSProber` and `HTTPProber`. Managed the Git repository.
+Scott West: Worked on `DNSProber`, and a little bit on `HTTPProber` and `RouteProber`. Managed the Git repository.
 
 #### Resources used:
 Scapy docs: https://scapy.readthedocs.io/en/latest/index.html
 
 Extract IPs/DNS response: https://www.je-clark.com/posts/dissecting-dns-responses-with-scapy
+
+Packet stacking/other: https://thepacketgeek.com/scapy/
