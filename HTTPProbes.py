@@ -63,6 +63,8 @@ class HTTPProber:
         # ls(TCP)
         # ls(HTTPRequest)
 
+        # TODO! someone check seq/ack numbers
+
         # create TCP packet - SYN
         syn_packet = \
             IP(dst=self.dst_ip) / \
@@ -111,15 +113,31 @@ class HTTPProber:
         :return:
         """
 
-        # construct a HTTP GET request packet
-        request = \
+        # TODO! someone check seq/ack numbers, and request packet
+        # TODO! playing around; no idea if this is right
+
+        http_get = \
+            IP(dst=self.dst_ip) / \
+            TCP(sport=self.src_port, dport=self.dst_port,
+                flags='', seq=1002, ack=1003) / \
             HTTP() / \
-            HTTPRequest(Host=self.dst_ip + ":" + str(self.dst_port), Accept="text/html",
-                        Accept_Language="en-US,en", Connection="close", User_Agent=self.user_agent)
+            HTTPRequest(
+                Method="GET",
+                Path="/",
+                Host=self.dst_ip+":"+str(self.dst_port),
+                Accept="text/html",
+                Accept_Language="en-US,en",
+                Connection="close"
+            )
 
-        # send the GET request
+        # send the packet and monitor for responses
+        response = sr1(http_get)
 
-        # extract the HTTP content
+        # response.show()
+
+        # send the constructed GET request and monitor for responses
+
+        # extract HTTP content from responses and append it to self.content
 
         # sudo -E python3 HTTPProbes.py
 
