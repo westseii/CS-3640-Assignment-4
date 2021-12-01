@@ -19,3 +19,5 @@ Scapy docs: https://scapy.readthedocs.io/en/latest/index.html
 Extract IPs/DNS response: https://www.je-clark.com/posts/dissecting-dns-responses-with-scapy
 
 Packet stacking/other: https://thepacketgeek.com/scapy/
+
+SYN/ACK stuff: https://www.techopedia.com/definition/10339/three-way-handshake
