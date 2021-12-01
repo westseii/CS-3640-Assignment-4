@@ -41,7 +41,7 @@ class RouteProber:
             response = sr1(packet, timeout=3)  # prevent hanging
 
             if response:  # sometimes response is None?
-                self.path.append(response[IP].dst)
+                self.path.append(response[IP].src)
 
 
 def main():
