@@ -33,21 +33,15 @@ class RouteProber:
         # explore...
         # ls(ICMP)
 
-        # TODO! playing around; no idea if this is right
-
         # construct packets, time-to-live = i
         for i in range(1, 21):
             packet = IP(dst=self.dst_ip, ttl=i) / \
                 ICMP()
 
-            response = sr1(packet)
+            response = sr1(packet, timeout=3)  # prevent hanging
 
-            # response.show()
-
-            # print(response[ICMP].src)
-            self.path.append(response[ICMP].src)
-
-        # sudo -E python3 TraceRouteProbes.py
+            if response:  # sometimes response is None?
+                self.path.append(response[IP].dst)
 
 
 def main():

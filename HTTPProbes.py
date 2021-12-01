@@ -118,8 +118,7 @@ class HTTPProber:
 
         http_get = \
             IP(dst=self.dst_ip) / \
-            TCP(sport=self.src_port, dport=self.dst_port,
-                flags='', seq=1002, ack=1003) / \
+            TCP(sport=self.src_port, dport=self.dst_port, flags='S', seq=1002) / \
             HTTP() / \
             HTTPRequest(
                 Method="GET",
@@ -129,15 +128,6 @@ class HTTPProber:
                 Accept_Language="en-US,en",
                 Connection="close"
             )
-
-        # send the packet and monitor for responses
-        response = sr1(http_get)
-
-        # response.show()
-
-        # send the constructed GET request and monitor for responses
-
-        # extract HTTP content from responses and append it to self.content
 
         # sudo -E python3 HTTPProbes.py
 
