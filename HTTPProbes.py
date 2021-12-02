@@ -35,6 +35,9 @@ class HTTPProber:
         self.src_port = src_port
         self.user_agent = user_agent
         self.content = []
+
+        self.ack_num = None  # how else?
+
         self.__start_connection()
         self.__send_get_request()
         self.__end_connection()
@@ -61,27 +64,34 @@ class HTTPProber:
 
         # explore...
         # ls(TCP)
+        # ls(IP)
         # ls(HTTPRequest)
 
-        # TODO! someone check seq/ack numbers
+        # scooter = '10.0.2.15'
 
         # create TCP packet - SYN
         syn_packet = \
             IP(dst=self.dst_ip) / \
             TCP(sport=self.src_port, dport=self.dst_port, flags='S', seq=1000)
 
+        # syn_packet.show()
+
         syn_ack = sr1(syn_packet)  # request/response, begin handshake
 
-        # show the structure and attributes of the syn_ack
         # syn_ack.show()
 
+        # print(syn_ack.seq)
         ack_num = syn_ack.seq + 1
+        self.ack_num = ack_num  # how else?
+        # print(ack_num)
 
         # create TCP packet - ACK
         ack_packet = \
             IP(dst=self.dst_ip) / \
             TCP(sport=self.src_port, dport=self.dst_port,
                 flags='A', seq=1001, ack=ack_num)
+
+        # ack_packet.show()
 
         send(ack_packet)  # reply with ACK
 
@@ -113,21 +123,25 @@ class HTTPProber:
         :return:
         """
 
-        # TODO! someone check seq/ack numbers, and request packet
-        # TODO! playing around; no idea if this is right
-
-        http_get = \
+        packet = \
             IP(dst=self.dst_ip) / \
-            TCP(sport=self.src_port, dport=self.dst_port, flags='S', seq=1002) / \
+            TCP(sport=self.src_port, dport=self.dst_port,
+                flags='A', seq=1001, ack=self.ack_num) / \
             HTTP() / \
-            HTTPRequest(
-                Method="GET",
-                Path="/",
-                Host=self.dst_ip+":"+str(self.dst_port),
-                Accept="text/html",
-                Accept_Language="en-US,en",
-                Connection="close"
-            )
+            HTTPRequest(Host=self.dst_ip+":"+str(self.dst_port),
+                        Accept="text/html",
+                        Accept_Language="en-US,en",
+                        Connection="close",
+                        User_Agent=self.user_agent
+                        )
+
+        # packet.show()
+
+        response = sr(packet, multi=1, timeout=3)
+
+        for res in response:
+            # idk...
+            pass
 
         # sudo -E python3 HTTPProbes.py
 
