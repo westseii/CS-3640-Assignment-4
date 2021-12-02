@@ -10,8 +10,8 @@ Scott West
 
 #### Credits (NOT final):
 Leon Deng: Tested and reviewed code.<br>
-Justin Liu: Worked on `HTTPProber`. Tested and reviewed code.<br>
-Scott West: Worked on `DNSProber` and `RouteProber`, and on the `__start_connection()` 3-way handshake function. Managed the Git repository.
+Justin Liu: Worked on `HTTPProber`. Assisted with 3-way handshake. Tested and reviewed code.<br>
+Scott West: Worked on `DNSProber` and `RouteProber`, and on the `__start_connection()` 3-way handshake. Managed the Git repository.
 
 #### Resources used:
 Scapy docs: https://scapy.readthedocs.io/en/latest/index.html
