@@ -73,6 +73,8 @@ class DNSProber:
         :return:
         """
 
+        # self.dns_response.show()
+
         # iterate all the answers in the answers field
         for ans in range(self.dns_response[DNS].ancount):
             self.returned_ips.append(self.dns_response[DNS].an[ans].rdata)
