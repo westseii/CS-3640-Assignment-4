@@ -1,3 +1,5 @@
+https://0xbharath.github.io/art-of-packet-crafting-with-scapy/scapy/sending_recieving/index.html
+
 :fireworks: <a href="https://github.com/guedou/guedou.github.io/blob/master/talks/2019_BHUSA/Scapy.ipynb"> More readable slides here </a> :fireworks:
 
 <hr>
