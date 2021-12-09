@@ -99,9 +99,6 @@ class HTTPProber:
         a = TCP_client.tcplink(HTTP, self.dst_ip, self.dst_port)
         answer = a.sr1(req)						# Send request / Store response
         self.content.append(answer.load)		# Add response data to content
-        print('\n')							    # Testing
-        print(self.content)						# ---
-        print('\n')							    # ---
         a.close()
         
         return
