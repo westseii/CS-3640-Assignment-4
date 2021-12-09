@@ -133,8 +133,12 @@ class HTTPProber:
             if unans:
                 unans.show()
 
+            """
             if not unans:
                 break
+            """
+
+            request.ack = request.ack + 1
 
         # sudo -E python3 HTTPProbes.py
 
