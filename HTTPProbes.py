@@ -1,13 +1,16 @@
 """
 Note: Scapy does not use the TCP implementation made available by the Kernel.
+
 This has implications for the way you deal with the TCP handshake.
 - Scapy sends out its own SYN (unbeknownst to your kernel)
 - The Kernel and Scapy receives the SYN/ACK. This is unexpected to the kernel
     so it sends a TCP RST and shuts down the connection (making it unusable
     for Scapy).
+
 To circumvent this problem, you should have TCP RST packets from your kernel
 blocked. This means the outgoing RST from your kernel to the server gets dropped
 by the kernel "firewall" ==> the connection stays open for scapy to use.
+
 Run:
 `sudo iptables -A OUTPUT -p tcp --tcp-flags RST RST -s <your IP from 'ifconfig'> -j DROP`
 in the command line of your Linux VM.
@@ -33,6 +36,9 @@ class HTTPProber:
         self.user_agent = user_agent
         self.content = []
 
+        self.pass_seq = None
+        self.pass_ack = None
+
         self.__start_connection()
         self.__send_get_request()
         self.__end_connection()
@@ -41,27 +47,42 @@ class HTTPProber:
         """
         This method will complete a 3-way TCP handshake with the
         <self.dst_ip,self.dst_port> server.
+
         1. You will need to craft a TCP packet to the server which has the SYN flag set
             and contains an appropriate sequence number and source port. Once you have
             this packet you will find an appropriate Scapy function to send this packet
             and record the server's response (the SYN/ACK).
+
         2. You will then need to parse the server's response to extract its sequence number
             and use this to set the acknowledgment number in your ACK packet. Send your ACK
             back to the server with the ACK flag set and the appropriate sequence and
             acknowledgement numbers.
+
         The 3-way handshake is now complete.
+
         :return:
         """
 
-        # create TCP packet - SYN
-        syn_packet = IP(dst=self.dst_ip) / TCP(sport=self.src_port, dport=self.dst_port, flags='S', seq=1000)
-        syn_ack = sr1(syn_packet)  # request/response, begin handshake
+        # create TCP SYN packet
+        syn = \
+            IP(dst=self.dst_ip) / \
+            TCP(sport=self.src_port, dport=self.dst_port, flags='S')
+        # syn_packet.show()
 
-        # create TCP packet - ACK
-        ack_packet = IP(dst=self.dst_ip) / TCP(sport=self.src_port, dport=self.dst_port, flags='A', seq=1001, ack = syn_ack.seq + 1)
-        send(ack_packet)  # reply with ACK
-        
-        return
+        syn_ack = sr1(syn)
+        # syn_ack.show()
+
+        self.pass_seq = syn_ack[TCP].seq + 1
+        self.pass_ack = syn_ack[TCP].ack
+
+        # create TCP ACK packet
+        ack = \
+            IP(dst=self.dst_ip) / \
+            TCP(sport=self.src_port, dport=self.dst_port, flags='A',
+                seq=syn_ack[TCP].ack, ack=syn_ack[TCP].seq + 1)
+        # ack_packet.show()
+
+        send(ack)
 
         # sudo -E python3 HTTPProbes.py
 
@@ -69,6 +90,7 @@ class HTTPProber:
         """
         This method will construct, send, and record the responses from a HTTP GET request
         to the specific web server.
+
         1. Construct a HTTP GET request packet to the server. When doing so, be sure to:
             - set the IP addresses and TCP ports (source and destination correctly).
             - set the appropriate TCP sequence and acknowledgement numbers.
@@ -78,52 +100,60 @@ class HTTPProber:
                                                            Accept="text/html",
                                                            Accept_Language="en-US,en",
                                                            Connection="close"
+
         2. Send the constructed GET request and monitor for responses keeping in mind that
             responses may be spread across multiple packets. Save the responses.
             - Remember that you will need to ACK responses as they come in (with the correct ACK numbers).
                 Otherwise the sender will keep resending them.
+
         3. From each response packet make sure to extract the HTTP content and append it to the
             `self.content` list.
+
         :return:
         """
-        
-        # HTTP Request
-        load_layer("http")
-        req = HTTP()/HTTPRequest(
-        	Host = self.dst_ip + ':' + str(self.dst_port),
-        	User_Agent = self.user_agent,
-        	Accept = "text/html",
-        	Accept_Language = "en-US,en",
-        	Connection = "close"
-        )
-        a = TCP_client.tcplink(HTTP, self.dst_ip, self.dst_port)
-        answer = a.sr1(req)						# Send request / Store response
-        self.content.append(answer.load)		# Add response data to content
-        print('\n')							    # Testing
-        print(self.content)						# ---
-        print('\n')							    # ---
-        a.close()
-        
-        return
+
+        GET = 'GET / HTTP/1.1\r\nHost: ' + self.dst_ip+":"+str(self.dst_port) + \
+            '\r\nAccept: text/html' \
+            '\r\nAccept_Language: en-US,en' \
+            '\r\nConnection: close' \
+            '\r\nUser_Agent: ' + self.user_agent + '\r\n\r\n' \
+
+
+        request = \
+            IP(dst=self.dst_ip) / \
+            TCP(sport=self.src_port, dport=self.dst_port,
+                flags='PA', seq=self.pass_ack, ack=self.pass_seq + 1)
+
+        while True:
+
+            ans, unans = sr(request / GET)
+
+            if ans:
+                ans.show()
+            if unans:
+                unans.show()
+
+            """
+            if not unans:
+                break
+            """
+
+            request.ack = request.ack + 1
+
+        # sudo -E python3 HTTPProbes.py
 
     def __end_connection(self):
         """
         This method will send a FIN packet and exit.
+
         1. Construct a TCP FIN packet with the appropriate header values and flags.
         2. Send this packet.
         3. return. [we're not going to be polite].
-        :return:
+
+        : return:
         """
-        
-        # For acking purposes
-        syn = IP(dst = self.dst_ip) / TCP (sport = self.src_port, dport = self.dst_port, flags = 'S', seq = 1004)
-        sa = sr1(syn)
-        
-        # Create and send FIN packet
-        rude_fin = IP(dst = self.dst_ip) / TCP (sport = self.src_port, dport = self.dst_port, flags= 'FA', seq = 1005, ack = sa.seq + 1)
-        send(rude_fin)
-        
-        return
+
+    # sudo -E python3 HTTPProbes.py
 
 
 def main():
