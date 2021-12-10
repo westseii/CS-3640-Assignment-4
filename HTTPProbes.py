@@ -112,33 +112,31 @@ class HTTPProber:
         :return:
         """
 
-        GET = 'GET / HTTP/1.1\r\nHost: ' + self.dst_ip+":"+str(self.dst_port) + \
-            '\r\nAccept: text/html' \
-            '\r\nAccept_Language: en-US,en' \
-            '\r\nConnection: close' \
-            '\r\nUser_Agent: ' + self.user_agent + '\r\n\r\n' \
-
-
-        request = \
-            IP(dst=self.dst_ip) / \
+        packet = IP(dst=self.dst_ip) / \
             TCP(sport=self.src_port, dport=self.dst_port,
-                flags='PA', seq=self.pass_ack, ack=self.pass_seq + 1)
+                flags='A', seq=self.pass_ack, ack=self.pass_seq)
 
-        while True:
+        GET = 'GET / HTTP/1.1\r\nAccept: text/html\r\nAccept-Language: en-US,en\r\nConnection: close\r\nHost: ' + \
+            self.dst_ip+":"+str(self.dst_port) + \
+            '\r\nUser-Agent: '+self.user_agent+'\r\n\r\n'
 
-            ans, unans = sr(request / GET)
+        request = packet / GET
 
-            if ans:
-                ans.show()
-            if unans:
-                unans.show()
+        answer = sr1(request)
 
-            """
-            if not unans:
-                break
-            """
+        while 'F' not in answer[TCP].flags:  # F to pay respects
 
-            request.ack = request.ack + 1
+            ack = IP(dst=self.dst_ip) / \
+                TCP(sport=self.src_port, dport=self.dst_port, flags='A',
+                    seq=answer[TCP].ack + 1, ack=answer[TCP].seq + 1)
+
+            answer = sr1(ack)
+
+            self.content.append(answer.load)
+
+        print(self.content)
+
+        # print(test)
 
         # sudo -E python3 HTTPProbes.py
 
@@ -152,6 +150,16 @@ class HTTPProber:
 
         : return:
         """
+
+        # For acking purposes
+        syn = IP(dst=self.dst_ip) / TCP(sport=self.src_port,
+                                        dport=self.dst_port, flags='S', seq=1004)
+        sa = sr1(syn)
+
+        # Create and send FIN packet
+        rude_fin = IP(dst=self.dst_ip) / TCP(sport=self.src_port,
+                                             dport=self.dst_port, flags='FA', seq=1005, ack=sa.seq + 1)
+        send(rude_fin)
 
     # sudo -E python3 HTTPProbes.py
 
