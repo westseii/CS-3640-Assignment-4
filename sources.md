@@ -9,7 +9,7 @@ Justin Liu<br>
 Scott West
 
 #### Credits (NOT final):
-Leon Deng: Tested and reviewed code. Went to Office Hours<br>
+Leon Deng: Tested and reviewed code. Went to office hours on our behalf.<br>
 Justin Liu: Worked on `HTTPProber`. Assisted with 3-way handshake. Tested and reviewed code.<br>
 Scott West: Worked on `DNSProber` and `RouteProber`, and on the `__start_connection()` 3-way handshake. Managed the Git repository.
 
