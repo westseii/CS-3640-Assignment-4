@@ -112,33 +112,21 @@ class HTTPProber:
         :return:
         """
 
-        packet = IP(dst=self.dst_ip) / \
-            TCP(sport=self.src_port, dport=self.dst_port,
-                flags='A', seq=self.pass_ack, ack=self.pass_seq)
+        # HTTP Request
+        load_layer("http")
+        req = HTTP()/HTTPRequest(
+            Host=self.dst_ip + ':' + str(self.dst_port),
+            User_Agent=self.user_agent,
+            Accept="text/html",
+            Accept_Language="en-US,en",
+            Connection="close"
+        )
+        a = TCP_client.tcplink(HTTP, self.dst_ip, self.dst_port)
+        answer = a.sr1(req)						# Send request / Store response
+        self.content.append(answer.load)		# Add response data to content
+        a.close()
 
-        GET = 'GET / HTTP/1.1\r\nAccept: text/html\r\nAccept-Language: en-US,en\r\nConnection: close\r\nHost: ' + \
-            self.dst_ip+":"+str(self.dst_port) + \
-            '\r\nUser-Agent: '+self.user_agent+'\r\n\r\n'
-
-        request = packet / GET
-
-        answer = sr1(request)
-
-        while 'F' not in answer[TCP].flags:  # F to pay respects
-
-            ack = IP(dst=self.dst_ip) / \
-                TCP(sport=self.src_port, dport=self.dst_port, flags='A',
-                    seq=answer[TCP].ack + 1, ack=answer[TCP].seq + 1)
-
-            answer = sr1(ack)
-
-            self.content.append(answer.load)
-
-        print(self.content)
-
-        # print(test)
-
-        # sudo -E python3 HTTPProbes.py
+        return
 
     def __end_connection(self):
         """

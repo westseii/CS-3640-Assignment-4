@@ -9,7 +9,7 @@ Justin Liu<br>
 Scott West
 
 #### Credits (NOT final):
-Leon Deng: Tested and reviewed code.<br>
+Leon Deng: Tested and reviewed code. Went to Office Hours<br>
 Justin Liu: Worked on `HTTPProber`. Assisted with 3-way handshake. Tested and reviewed code.<br>
 Scott West: Worked on `DNSProber` and `RouteProber`, and on the `__start_connection()` 3-way handshake. Managed the Git repository.
 
@@ -21,3 +21,5 @@ Extract IPs/DNS response: https://www.je-clark.com/posts/dissecting-dns-response
 Packet stacking/other: https://thepacketgeek.com/scapy/
 
 SYN/ACK stuff: https://www.techopedia.com/definition/10339/three-way-handshake
+
+HTTP: https://scapy.readthedocs.io/en/latest/layers/http.html
